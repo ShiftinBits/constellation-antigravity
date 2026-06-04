@@ -1,6 +1,7 @@
-description = "Get a high-level overview of the codebase architecture"
-
-prompt = """
+---
+name: architecture
+description: Get a high-level overview of the codebase architecture
+---
 Retrieve a high-level architectural overview of the codebase using `mcp_constellation_code_intel` with `getArchitectureOverview({ includeMetrics: true, includeModuleGraph: false })`.
 
 **Present the following:**
@@ -23,4 +24,3 @@ Retrieve a high-level architectural overview of the codebase using `mcp_constell
    - Note if it's heavily function-based vs class-based, multi-language codebase characteristics, and relative size of different areas.
 
 Keep the output concise and scannable. Focus on giving a quick mental model of the codebase structure.
-"""

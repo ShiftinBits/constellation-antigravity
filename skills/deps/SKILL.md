@@ -1,6 +1,7 @@
-description = "Analyze dependencies for a file or symbol"
-
-prompt = """
+---
+name: deps
+description: Analyze dependencies for a file or symbol
+---
 Analyze dependencies for the specified file: {{args}}.
 
 **If no file path is provided**, ask the user what file they want to analyze.
@@ -14,4 +15,3 @@ Otherwise:
 2. Present: Summary (count of internal vs external), Internal Dependencies (each file and symbols imported), External Packages (npm list), and Circular Dependencies (cycles detected, severity, and path).
 
 Highlight any circular dependencies as potential issues to address.
-"""

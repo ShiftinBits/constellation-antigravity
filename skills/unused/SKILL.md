@@ -1,6 +1,7 @@
-description = "Find orphaned/dead code that is exported but never imported"
-
-prompt = """
+---
+name: unused
+description: Find orphaned/dead code that is exported but never imported
+---
 Find exported code that is never imported or used anywhere in the codebase using `mcp_constellation_code_intel` with `findOrphanedCode({ filterByKind: ["{{args}}"] || [] })`.
 
 **If orphaned code is found**, present:
@@ -15,4 +16,3 @@ Find exported code that is never imported or used anywhere in the codebase using
 - Focus on files with multiple orphans first.
 
 **If no orphans found**, congratulate the user on a clean codebase.
-"""

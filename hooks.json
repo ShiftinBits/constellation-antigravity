@@ -7,8 +7,8 @@
         "hooks": [
           {
             "type": "command",
-            "command": "node ${extensionPath}/hooks/inject.js SessionStart",
-						"description": "Inject code_intel awareness at the start of the session"
+            "command": "node ./hooks/inject.js SessionStart",
+            "description": "Inject code_intel awareness at the start of the session"
           }
         ]
       }
@@ -19,8 +19,8 @@
         "hooks": [
           {
             "type": "command",
-            "command": "node ${extensionPath}/hooks/inject.js BeforeAgent",
-						"description": "Inject code_intel awareness before agent execution"
+            "command": "node ./hooks/inject.js BeforeAgent",
+            "description": "Inject code_intel awareness before agent execution"
           }
         ]
       }
@@ -31,8 +31,8 @@
         "hooks": [
           {
             "type": "command",
-            "command": "node ${extensionPath}/hooks/inject.js BeforeTool",
-						"description": "Steer model toward using code_intel tool for code search or navigation tasks"
+            "command": "node ./hooks/inject.js BeforeTool",
+            "description": "Steer model toward using code_intel tool for code search or navigation tasks"
           }
         ]
       },
@@ -41,8 +41,8 @@
         "hooks": [
           {
             "type": "command",
-            "command": "node ${extensionPath}/hooks/shell.js",
-						"description": "Steer model toward using code_intel tool for code search or navigation tasks"
+            "command": "node ./hooks/shell.js",
+            "description": "Steer model toward using code_intel tool for code search or navigation tasks"
           }
         ]
       }

@@ -1,6 +1,7 @@
-description = "Quick health check for Constellation connectivity and authentication"
-
-prompt = """
+---
+name: diagnose
+description: Quick health check for Constellation connectivity and authentication
+---
 Run a quick Constellation health check by calling `mcp_constellation_code_intel` with `getArchitectureOverview({ includeMetrics: true })`.
 
 **Interpret the response and report:**
@@ -39,4 +40,3 @@ Report:
 - API Auth: UNREACHABLE
 - Issue: Cannot reach the Constellation API server.
 - Quick Fixes: Check network, verify API URL.
-"""

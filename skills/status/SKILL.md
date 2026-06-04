@@ -1,6 +1,7 @@
-description = "Check Constellation API connectivity and authentication status"
-
-prompt = """
+---
+name: status
+description: Check Constellation API connectivity and authentication status
+---
 Check the Constellation API connection status by calling the `mcp_constellation_code_intel` tool.
 
 **If successful** (result.pong === true), report:
@@ -21,4 +22,3 @@ Check the Constellation API connection status by calling the `mcp_constellation_
 **If the tool call fails entirely**, report that the Constellation MCP server is not running or not configured.
 
 Keep the response brief and actionable.
-"""

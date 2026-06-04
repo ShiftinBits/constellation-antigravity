@@ -1,6 +1,7 @@
-description = "Analyze the impact of changing a symbol or file"
-
-prompt = """
+---
+name: impact
+description: Analyze the impact of changing a symbol or file
+---
 Analyze the impact of changing the specified symbol: {{args}}.
 
 **If no symbol name is provided**, ask the user what symbol they want to analyze.
@@ -15,4 +16,3 @@ Use `mcp_constellation_code_intel` with `impactAnalysis({ symbolName: "{{args}}"
 5. **Recommendations**: Specific steps to safely proceed.
 
 **If high or critical risk**, emphasize caution and suggest reviewing dependents before making changes.
-"""

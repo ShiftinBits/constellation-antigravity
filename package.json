@@ -1,17 +1,17 @@
 {
-  "name": "constellation-gemini",
-  "version": "1.2.0",
-  "description": "Upgrade Gemini from text search to code understanding.",
+  "name": "constellation-antigravity",
+  "version": "1.0.0",
+  "description": "Upgrade Antigravity from text search to code understanding.",
   "author": {
     "name": "ShiftinBits Inc"
   },
   "license": "AGPL-3.0",
-  "homepage": "https://docs.constellationdev.io/plugins/gemini",
+  "homepage": "https://docs.constellationdev.io/plugins/antigravity",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [
-    "gemini-extension",
+    "antigravity-plugin",
     "mcp",
     "constellation",
     "code-intelligence",
