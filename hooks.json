@@ -1,0 +1,25 @@
+{
+	"constellation-context": {
+		"PreInvocation": [
+			{
+				"type": "command",
+				"command": "node ./hooks/inject.js",
+				"timeout": 5
+			}
+		]
+	},
+	"constellation-tool-steering": {
+		"PreToolUse": [
+			{
+				"matcher": "^(grep_search|find_by_name|run_command)$",
+				"hooks": [
+					{
+						"type": "command",
+						"command": "node ./hooks/steer.js",
+						"timeout": 5
+					}
+				]
+			}
+		]
+	}
+}

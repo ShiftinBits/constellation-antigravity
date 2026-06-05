@@ -1,19 +1,28 @@
 'use strict';
 
-if (!process.env.CONSTELLATION_ACCESS_KEY?.startsWith('ak:')) process.exit(0);
+// PreInvocation hook: inject code_intel awareness once per conversation.
+// Input (stdin): { invocationNum, initialNumSteps, conversationId, ... }
+// Output (stdout): { injectSteps: [{ ephemeralMessage }] } or {}
 
-const hookEventName = process.argv[2];
+const MESSAGE = 'You have access to the Constellation code_intel source code intelligence tool, this should be your preferred tool for searching or navigating the code base (finding definitions or references, impact analysis, architecture details, etc.). Other search tools (e.g. grep, glob, awk, rg) should be used for literal text search or as a fallback.';
 
-const hookMessages = {
-	SessionStart: 'You have access to the mcp_constellation_code_intel source code intelligence tool, this should be your preferred tool for searching or navigating the code base (finding definitions or references, impact analysis, architecture details, etc.). Other search tools (e.g. grep, glob, awk, rg) should be used for literal text search or as a fallback.',
-	BeforeAgent: 'You have access to the mcp_constellation_code_intel source code intelligence tool, this should be your preferred tool for searching or navigating the code base (finding definitions or references, impact analysis, architecture details, etc.). Other search tools (e.g. grep, glob, awk, rg) should be used for literal text search or as a fallback.',
-	BeforeTool: 'Use the mcp_constellation_code_intel tool before other tools for searching or navigating the codebase. Other search tools (e.g. grep, glob, awk, rg) should be used for literal text search or as a fallback.',
-};
+function emit(output) {
+	process.stdout.write(JSON.stringify(output));
+}
 
-if (!hookMessages[hookEventName]) process.exit(0);
+async function main() {
+	if (!process.env.CONSTELLATION_ACCESS_KEY?.startsWith('ak:')) return emit({});
 
-const additionalContext = hookMessages[hookEventName];
+	let input = '';
+	for await (const chunk of process.stdin) input += chunk;
 
-process.stdout.write(JSON.stringify({
-	hookSpecificOutput: { hookEventName, additionalContext },
-}));
+	let inputData;
+	try { inputData = JSON.parse(input); } catch (e) { return emit({}); }
+
+	// Only inject on the first model invocation of the conversation (0-based).
+	if (inputData.invocationNum !== 0) return emit({});
+
+	emit({ injectSteps: [{ ephemeralMessage: MESSAGE }] });
+}
+
+main();

@@ -1,7 +1,9 @@
 description = "Find orphaned/dead code that is exported but never imported"
 
 prompt = """
-Find exported code that is never imported or used anywhere in the codebase using `mcp_constellation_code_intel` with `findOrphanedCode({ filterByKind: ["{{args}}"] || [] })`.
+**IMPORTANT: Do NOT invoke any skills or other commands. Directly call the MCP tool specified below.**
+
+Find exported code that is never imported or used anywhere in the codebase using the Constellation `code_intel` tool with `findOrphanedCode({})`. If a symbol kind is provided in the arguments ({{args}}), pass it as `findOrphanedCode({ filterByKind: ["<kind>"] })`.
 
 **If orphaned code is found**, present:
 1. **Summary**: Total count of orphaned exports, broken down by kind.

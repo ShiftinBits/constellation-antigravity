@@ -1,7 +1,9 @@
 description = "Get a high-level overview of the codebase architecture"
 
 prompt = """
-Retrieve a high-level architectural overview of the codebase using `mcp_constellation_code_intel` with `getArchitectureOverview({ includeMetrics: true, includeModuleGraph: false })`.
+**IMPORTANT: Do NOT invoke any skills or other commands. Directly call the MCP tool specified below.**
+
+Retrieve a high-level architectural overview of the codebase using the Constellation `code_intel` tool with `getArchitectureOverview({ includeMetrics: true, includeModuleGraph: false })`.
 
 **Present the following:**
 

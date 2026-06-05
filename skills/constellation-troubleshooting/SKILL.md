@@ -12,13 +12,13 @@ Diagnose Constellation plugin failures. If unavailable, continue with local sear
 1. If `code_intel` cannot be called, treat as MCP startup/config issue.
 2. If a response includes `error.code`, branch by code:
    `AUTH_ERROR`, `PROJECT_NOT_INDEXED`, `SYMBOL_NOT_FOUND`, `FILE_NOT_FOUND`, `API_UNREACHABLE`.
-3. If status is unclear, run `/constellation:status` then `/constellation-diagnose`.
+3. If status is unclear, follow the `status` skill, then the `diagnose` skill.
 
 ## MCP Server Issues
 
 Symptom: connection failures or missing `code_intel`.
 
-1. Restart Gemini.
+1. Restart Antigravity CLI (`agy`).
 2. Verify MCP binary:
 ```bash
 npx -y @constellationdev/mcp@latest --version

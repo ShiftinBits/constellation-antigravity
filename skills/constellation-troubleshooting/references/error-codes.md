@@ -4,7 +4,7 @@
 
 | Code | Message | Cause | Fix | Recoverable |
 |------|---------|-------|-----|-------------|
-| `MCP_UNAVAILABLE` | MCP server not running | stdio server failed to start | Restart Gemini CLI, check gemini-extension.json | No |
+| `MCP_UNAVAILABLE` | MCP server not running | stdio server failed to start | Restart Antigravity CLI, check the plugin's mcp_config.json | No |
 
 ## Authentication Errors
 

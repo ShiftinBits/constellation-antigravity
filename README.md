@@ -1,14 +1,16 @@
-# <img src="https://constellationdev.io/gemini-icon.svg" height="30"> Constellation Extension for Gemini CLI
+# <img src="https://constellationdev.io/antigravity-icon.svg" height="30"> Constellation Plugin for Google Antigravity
 
 [![MCP Server](https://img.shields.io/badge/MCP-@constellationdev/mcp-black.svg?logo=modelcontextprotocol)](https://github.com/ShiftinBits/constellation-mcp) [![License: AGPL-3.0](https://img.shields.io/badge/License-AGPL--3.0-3DA639?logo=opensourceinitiative&logoColor=white)](LICENSE)
 
-While Constellation's MCP server provides raw code intelligence capabilities, this plugin enhances your Gemini CLI experience with:
+While Constellation's MCP server provides raw code intelligence capabilities, this plugin enhances your Antigravity experience with:
 
 | Feature | Benefit |
 |---------|---------|
 | **Slash Commands** | Quick access to common workflows |
-| **Contextual Skills** | Gemini automatically loads relevant knowledge when needed |
-| **Session Hooks** | Transparent steering toward `code_intel` for structural code queries |
+| **Contextual Skills** | Antigravity automatically loads relevant knowledge — including proactive impact analysis before risky changes |
+| **Rules** | Always-on guidance steering the agent toward graph-backed code understanding |
+| **Hooks** | Transparent steering toward `code_intel` for structural code queries |
+| **MCP Server** | Bundled `code_intel` server connection, no separate setup |
 
 ## Features
 
@@ -27,23 +29,35 @@ Execute powerful analysis with simple slash commands:
 
 ### Skills
 
-Gemini automatically activates specialized knowledge based on your questions:
+Antigravity automatically activates specialized knowledge based on your questions:
 
 | Skill | Triggers When You Ask About... |
 |-------|-------------------------------|
 | **constellation-troubleshooting** | Error codes, connectivity issues, debugging problems |
-| **impact-analysis** | "Impact of changing X", "what would break if I modify X", "blast radius", "risk of renaming X", "safe to delete X" |
+| **impact-analysis** | Renaming, refactoring, deleting, or moving symbols/files; "what would break if...", "is X dead code", "what depends on X" |
+
+**Example Trigger:**
+
+```text
+You: "Rename AuthService to AuthenticationService"
+Antigravity: "Before renaming, let me analyze the potential impact..."
+[impact-analysis skill activates, runs api.impactAnalysis, reports risk + dependents]
+```
+
+### Rules
+
+`rules/constellation.md` establishes Constellation as the agent's primary code sense: structural queries, impact analysis, and architecture questions go to `code_intel`; literal text search falls back to grep.
 
 ### Hooks
 
-Event hooks transparently steer Gemini toward `code_intel` for structural code questions. All hooks are gated on `CONSTELLATION_ACCESS_KEY` being set (prefix `ak:`) and emit context only — they never block execution:
+Event hooks transparently steer Antigravity toward `code_intel` for structural code questions. All hooks are gated on `CONSTELLATION_ACCESS_KEY` being set (prefix `ak:`) and never block execution:
 
 | Hook | Event | Matcher | Behavior |
 |------|-------|---------|----------|
-| **Session Context** | `SessionStart` | `.*` | Establishes `code_intel` as the primary tool for code understanding when a session starts |
-| **Sub-agent Context** | `BeforeAgent` | `.*` | Injects the same awareness into spawned sub-agents (built-ins don't inherit `GEMINI.md`) |
-| **Tool Steering** | `BeforeTool` | `grep_search\|glob` | Reminds Gemini to prefer `code_intel` for structural queries before falling back to text search |
-| **Shell Steering** | `BeforeTool` | `run_shell_command` | Inspects `tool_input.command` and emits the same reminder when `grep`, `rg`, `glob`, `awk`, or `findstr` appears |
+| **constellation-context** | `PreInvocation` | — | Injects `code_intel` awareness as an ephemeral message on the first model invocation of each conversation |
+| **constellation-tool-steering** | `PreToolUse` | `^(grep_search\|find_by_name\|run_command)$` | Reminds Antigravity to prefer `code_intel` when it reaches for text search, file search, or shell commands containing `grep`, `rg`, `glob`, `awk`, or `findstr` |
+
+The `PreToolUse` hook always returns decision `ask`, which defers to the host's normal permission flow. It never grants (`allow`) or blocks (`deny`) tool calls; it only attaches a steering reason.
 
 ## Installation
 
@@ -51,13 +65,24 @@ Event hooks transparently steer Gemini toward `code_intel` for structural code q
 
 1. **Constellation Account** (see [Constellation](https://app.constellationdev.io))
 2. **Project indexed** in Constellation
-3. **Access key** configured
+3. **Access key** configured (`CONSTELLATION_ACCESS_KEY` environment variable)
 
-### Quick Start
+### Antigravity CLI
 
 ```bash
-gemini extensions install https://github.com/ShiftinBits/constellation-gemini
+agy plugin install https://github.com/ShiftinBits/constellation-antigravity
 ```
+
+### Manual install
+
+Clone (or copy) this repository into one of Antigravity's plugin locations:
+
+| Scope | Location |
+|-------|----------|
+| Workspace | `<workspace-root>/.agents/plugins/constellation/` |
+| Global | `~/.gemini/config/plugins/constellation/` |
+
+Antigravity scans these directories automatically and loads the plugin's commands, skills, rules, hooks, and MCP server.
 
 ## Usage Examples
 
@@ -127,15 +152,17 @@ No circular dependencies detected.
 
 | Issue | Solution |
 |-------|----------|
-| `AUTH_ERROR` | Check `CONSTELLATION_ACCESS_KEY` is set correctly, use `constellation auth` CLI command to set |
+| `AUTH_ERROR` | Check `CONSTELLATION_ACCESS_KEY` is set correctly, use `npx @constellationdev/cli auth` to set |
 | `PROJECT_NOT_INDEXED` | Run `constellation index --full` in your project |
-| Commands not appearing | Restart Gemini CLI or check plugin path |
+| Commands or skills not appearing | Restart Antigravity, check the plugin path, or browse `/skills` |
+| MCP server not connecting | Check `/mcp` in the Antigravity CLI for server status and logs |
 
 ## Documentation
 
 - [Constellation Documentation](https://docs.constellationdev.io) — Full platform documentation
 - [MCP Server](https://github.com/shiftinbits/constellation-mcp) — Underlying MCP server
-- [Gemini CLI Extensions](https://geminicli.com/docs/extensions/) — Extension development guide
+- [Antigravity Plugins](https://antigravity.google/docs/plugins) — Plugin structure reference
+- [Antigravity CLI Plugins & Skills](https://antigravity.google/docs/cli-plugins) — CLI plugin guide
 
 ## License
 
