@@ -1,6 +1,6 @@
 ---
 name: impact-analysis
-description: Use when analyzing the impact of changing, renaming, or deleting a symbol. Provides risk assessment, blast radius, affected files, test coverage, and recommendations. Triggers for: "impact of changing X", "what would break if I modify X", "blast radius", "risk of renaming X", "safe to delete X"
+description: Analyzes the impact of changing, renaming, or deleting a symbol, providing risk assessment, blast radius, affected files, test coverage, and recommendations. Use for questions like "impact of changing X", "what would break if I modify X", "blast radius", "risk of renaming X", "safe to delete X".
 ---
 
 # Impact Analysis
