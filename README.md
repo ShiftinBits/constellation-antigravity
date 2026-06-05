@@ -6,26 +6,43 @@ While Constellation's MCP server provides raw code intelligence capabilities, th
 
 | Feature | Benefit |
 |---------|---------|
-| **Skills** | Antigravity automatically loads relevant code intelligence workflows, also invocable as slash commands |
+| **Slash Commands** | Quick access to common workflows |
+| **Contextual Skills** | Antigravity automatically loads relevant knowledge — including proactive impact analysis before risky changes |
 | **Rules** | Always-on guidance steering the agent toward graph-backed code understanding |
 | **Hooks** | Transparent steering toward `code_intel` for structural code queries |
 | **MCP Server** | Bundled `code_intel` server connection, no separate setup |
 
 ## Features
 
+### Commands
+
+Execute powerful analysis with simple slash commands:
+
+| Command | Description |
+|---------|-------------|
+| `/constellation:status` | Check API connectivity and project indexing status |
+| `/constellation:diagnose` | Quick health check for connectivity and authentication |
+| `/constellation:impact <symbol> <file>` | Analyze blast radius before changing a symbol |
+| `/constellation:deps <file> [--reverse]` | Map dependencies or find what depends on a file |
+| `/constellation:unused` | Discover orphaned exports and dead code |
+| `/constellation:architecture` | Get a high-level overview of your codebase structure |
+
 ### Skills
 
-Antigravity activates these automatically based on your questions, or invoke them by name:
+Antigravity automatically activates specialized knowledge based on your questions:
 
 | Skill | Triggers When You Ask About... |
 |-------|-------------------------------|
-| **status** | Constellation connection or auth status |
-| **diagnose** | Health check for MCP server, API auth, and indexing |
-| **impact-analysis** | "Impact of changing X", "what would break if I modify X", "blast radius", "risk of renaming X", "safe to delete X" |
-| **deps** | A file's dependencies, dependents, or circular dependencies |
-| **unused** | Orphaned exports, dead code, cleanup candidates |
-| **architecture** | High-level codebase structure and composition |
 | **constellation-troubleshooting** | Error codes, connectivity issues, debugging problems |
+| **impact-analysis** | Renaming, refactoring, deleting, or moving symbols/files; "what would break if...", "is X dead code", "what depends on X" |
+
+**Example Trigger:**
+
+```text
+You: "Rename AuthService to AuthenticationService"
+Antigravity: "Before renaming, let me analyze the potential impact..."
+[impact-analysis skill activates, runs api.impactAnalysis, reports risk + dependents]
+```
 
 ### Rules
 
@@ -65,14 +82,14 @@ Clone (or copy) this repository into one of Antigravity's plugin locations:
 | Workspace | `<workspace-root>/.agents/plugins/constellation/` |
 | Global | `~/.gemini/config/plugins/constellation/` |
 
-Antigravity scans these directories automatically and loads the plugin's skills, rules, hooks, and MCP server.
+Antigravity scans these directories automatically and loads the plugin's commands, skills, rules, hooks, and MCP server.
 
 ## Usage Examples
 
 ### Check Your Setup
 
 ```
-> Use the status skill to check Constellation
+> /constellation:status
 
 Status: Connected
 Project: my-awesome-app
@@ -84,7 +101,7 @@ Languages: TypeScript, JavaScript
 ### Analyze Before Refactoring
 
 ```
-> What's the impact of changing validateUser in src/auth/validator.ts?
+> /constellation:impact validateUser src/auth/validator.ts
 
 Symbol: validateUser (function)
 Risk Level: MEDIUM
@@ -100,7 +117,7 @@ Recommendations:
 ### Find Dead Code
 
 ```
-> Find unused functions in this codebase
+> /constellation:unused --kind function
 
 Found 7 orphaned functions:
 ├── src/utils/legacy.ts
@@ -114,7 +131,7 @@ Found 7 orphaned functions:
 ### Understand Dependencies
 
 ```
-> What does src/services/payment.service.ts depend on?
+> /constellation:deps src/services/payment.service.ts
 
 Dependencies (12):
 ├── Internal (8)
@@ -137,7 +154,7 @@ No circular dependencies detected.
 |-------|----------|
 | `AUTH_ERROR` | Check `CONSTELLATION_ACCESS_KEY` is set correctly, use `npx @constellationdev/cli auth` to set |
 | `PROJECT_NOT_INDEXED` | Run `constellation index --full` in your project |
-| Skills not appearing | Restart Antigravity, check the plugin path, or browse `/skills` |
+| Commands or skills not appearing | Restart Antigravity, check the plugin path, or browse `/skills` |
 | MCP server not connecting | Check `/mcp` in the Antigravity CLI for server status and logs |
 
 ## Documentation
