@@ -20,7 +20,7 @@ Execute powerful analysis with simple slash commands:
 
 | Command | Description |
 |---------|-------------|
-| `/constellation:status` | Check API connectivity and project indexing status |
+| `/constellation:status` | Check API connectivity and authentication status |
 | `/constellation:diagnose` | Quick health check for connectivity and authentication |
 | `/constellation:impact <symbol> <file>` | Analyze blast radius before changing a symbol |
 | `/constellation:deps <file> [--reverse]` | Map dependencies or find what depends on a file |
@@ -92,10 +92,8 @@ Antigravity scans these directories automatically and loads the plugin's command
 > /constellation:status
 
 Status: Connected
-Project: my-awesome-app
-Files Indexed: 1,247
-Symbols: 8,932
-Languages: TypeScript, JavaScript
+- Authentication valid, project access confirmed
+- Note: Use /constellation:diagnose to check indexing status
 ```
 
 ### Analyze Before Refactoring
