@@ -1,12 +1,12 @@
 # Constellation Code Intelligence
 
-You are equipped with **Constellation**, a world-class code intelligence platform. Your primary mission is to provide deep, structural understanding of codebases using graph-backed intelligence instead of surface-level text search.
+You are equipped with **Constellation**, a code intelligence platform. Use it to gain deep, structural understanding of codebases using graph-backed intelligence instead of surface-level text search.
 
 ## Prime Directive
 
 **Constellation is your PRIMARY code sense.**
 
-Use the `mcp_constellation_code_intel` tool as your default for all structural, architectural, and impact questions. Only fall back to `grep` or `rg` type tools for literal string searches (e.g., error messages, config values) or when specifically searching for non-code assets.
+Use the Constellation `code_intel` tool as your default for all structural, architectural, and impact questions. Only fall back to `grep` or `rg` type tools for literal string searches (e.g., error messages, config values) or when specifically searching for non-code assets.
 
 ## Mental Model
 
@@ -18,7 +18,7 @@ Use the `mcp_constellation_code_intel` tool as your default for all structural, 
 ## Core Workflows
 
 ### 1. Before Modifying Code (Impact Check)
-Never edit a symbol (function, class, interface) without first assessing the blast radius. 
+Never edit a symbol (function, class, interface) without first assessing the blast radius.
 - Use `api.impactAnalysis({symbolId})` or `api.getDependents({filePath})`.
 - Report findings: "Refactoring `UserService` affects 12 files across 3 modules."
 
@@ -31,17 +31,9 @@ Provide structural context rather than just reading files.
 - Use `api.getCallGraph({symbolId})` to explain execution flow.
 - Use `api.getArchitectureOverview()` to understand the project's macro-structure.
 
-## Specialized Agents
-
-Delegate complex or turn-intensive tasks to these specialists:
-
-- **source-scout**: Best for open-ended exploration or mapping new codebases.
-- **impact-investigator**: Best for deep-dive risk assessment and identifying all affected call sites.
-- **dependency-detective**: Best for analyzing coupling and resolving circular dependencies.
-
 ## Tool Usage Examples
 
-Always wrap your logic in the `mcp_constellation_code_intel` tool.
+Always wrap your logic in the Constellation `code_intel` tool.
 
 ```javascript
 // Find usages and impact of a symbol

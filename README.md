@@ -1,49 +1,46 @@
-# <img src="https://constellationdev.io/gemini-icon.svg" height="30"> Constellation Plugin for Antigravity CLI
+# <img src="https://constellationdev.io/gemini-icon.svg" height="30"> Constellation Plugin for Google Antigravity
 
 [![MCP Server](https://img.shields.io/badge/MCP-@constellationdev/mcp-black.svg?logo=modelcontextprotocol)](https://github.com/ShiftinBits/constellation-mcp) [![License: AGPL-3.0](https://img.shields.io/badge/License-AGPL--3.0-3DA639?logo=opensourceinitiative&logoColor=white)](LICENSE)
 
-While Constellation's MCP server provides raw code intelligence capabilities, this plugin enhances your Antigravity CLI experience with:
+While Constellation's MCP server provides raw code intelligence capabilities, this plugin enhances your Antigravity experience with:
 
 | Feature | Benefit |
 |---------|---------|
-| **Slash Commands** | Quick access to common workflows |
-| **Contextual Skills** | Antigravity automatically loads relevant knowledge when needed |
-| **Session Hooks** | Transparent steering toward `code_intel` for structural code queries |
+| **Skills** | Antigravity automatically loads relevant code intelligence workflows, also invocable as slash commands |
+| **Rules** | Always-on guidance steering the agent toward graph-backed code understanding |
+| **Hooks** | Transparent steering toward `code_intel` for structural code queries |
+| **MCP Server** | Bundled `code_intel` server connection, no separate setup |
 
 ## Features
 
-### Commands
-
-Execute powerful analysis with simple slash commands:
-
-| Command | Description |
-|---------|-------------|
-| `/constellation:status` | Check API connectivity and project indexing status |
-| `/constellation:diagnose` | Quick health check for connectivity and authentication |
-| `/constellation:impact <symbol> <file>` | Analyze blast radius before changing a symbol |
-| `/constellation:deps <file> [--reverse]` | Map dependencies or find what depends on a file |
-| `/constellation:unused` | Discover orphaned exports and dead code |
-| `/constellation:architecture` | Get a high-level overview of your codebase structure |
-
 ### Skills
 
-Antigravity automatically activates specialized knowledge based on your questions:
+Antigravity activates these automatically based on your questions, or invoke them by name:
 
 | Skill | Triggers When You Ask About... |
 |-------|-------------------------------|
-| **constellation-troubleshooting** | Error codes, connectivity issues, debugging problems |
+| **status** | Constellation connection or auth status |
+| **diagnose** | Health check for MCP server, API auth, and indexing |
 | **impact-analysis** | "Impact of changing X", "what would break if I modify X", "blast radius", "risk of renaming X", "safe to delete X" |
+| **deps** | A file's dependencies, dependents, or circular dependencies |
+| **unused** | Orphaned exports, dead code, cleanup candidates |
+| **architecture** | High-level codebase structure and composition |
+| **constellation-troubleshooting** | Error codes, connectivity issues, debugging problems |
+
+### Rules
+
+`rules/constellation.md` establishes Constellation as the agent's primary code sense: structural queries, impact analysis, and architecture questions go to `code_intel`; literal text search falls back to grep.
 
 ### Hooks
 
-Event hooks transparently steer Antigravity toward `code_intel` for structural code questions. All hooks are gated on `CONSTELLATION_ACCESS_KEY` being set (prefix `ak:`) and emit context only — they never block execution:
+Event hooks transparently steer Antigravity toward `code_intel` for structural code questions. All hooks are gated on `CONSTELLATION_ACCESS_KEY` being set (prefix `ak:`) and never block execution:
 
 | Hook | Event | Matcher | Behavior |
 |------|-------|---------|----------|
-| **Session Context** | `SessionStart` | `.*` | Establishes `code_intel` as the primary tool for code understanding when a session starts |
-| **Sub-agent Context** | `BeforeAgent` | `.*` | Injects the same awareness into spawned sub-agents (built-ins don't inherit `GEMINI.md`) |
-| **Tool Steering** | `BeforeTool` | `grep_search\|glob` | Reminds Antigravity to prefer `code_intel` for structural queries before falling back to text search |
-| **Shell Steering** | `BeforeTool` | `run_shell_command` | Inspects `tool_input.command` and emits the same reminder when `grep`, `rg`, `glob`, `awk`, or `findstr` appears |
+| **constellation-context** | `PreInvocation` | — | Injects `code_intel` awareness as an ephemeral message on the first model invocation of each conversation |
+| **constellation-tool-steering** | `PreToolUse` | `grep_search\|find_by_name\|run_command` | Reminds Antigravity to prefer `code_intel` when it reaches for text search, file search, or shell commands containing `grep`, `rg`, `glob`, `awk`, or `findstr` |
+
+The `PreToolUse` hook always returns a non-blocking decision: `allow` for the read-only search tools, `ask` for `run_command` (preserving the default permission flow).
 
 ## Installation
 
@@ -51,20 +48,31 @@ Event hooks transparently steer Antigravity toward `code_intel` for structural c
 
 1. **Constellation Account** (see [Constellation](https://app.constellationdev.io))
 2. **Project indexed** in Constellation
-3. **Access key** configured
+3. **Access key** configured (`CONSTELLATION_ACCESS_KEY` environment variable)
 
-### Quick Start
+### Antigravity CLI
 
 ```bash
 agy plugin install https://github.com/ShiftinBits/constellation-antigravity
 ```
+
+### Manual install
+
+Clone (or copy) this repository into one of Antigravity's plugin locations:
+
+| Scope | Location |
+|-------|----------|
+| Workspace | `<workspace-root>/.agents/plugins/constellation/` |
+| Global | `~/.gemini/config/plugins/constellation/` |
+
+Antigravity scans these directories automatically and loads the plugin's skills, rules, hooks, and MCP server.
 
 ## Usage Examples
 
 ### Check Your Setup
 
 ```
-> /constellation:status
+> Use the status skill to check Constellation
 
 Status: Connected
 Project: my-awesome-app
@@ -76,7 +84,7 @@ Languages: TypeScript, JavaScript
 ### Analyze Before Refactoring
 
 ```
-> /constellation:impact validateUser src/auth/validator.ts
+> What's the impact of changing validateUser in src/auth/validator.ts?
 
 Symbol: validateUser (function)
 Risk Level: MEDIUM
@@ -92,7 +100,7 @@ Recommendations:
 ### Find Dead Code
 
 ```
-> /constellation:unused --kind function
+> Find unused functions in this codebase
 
 Found 7 orphaned functions:
 ├── src/utils/legacy.ts
@@ -106,7 +114,7 @@ Found 7 orphaned functions:
 ### Understand Dependencies
 
 ```
-> /constellation:deps src/services/payment.service.ts
+> What does src/services/payment.service.ts depend on?
 
 Dependencies (12):
 ├── Internal (8)
@@ -127,15 +135,17 @@ No circular dependencies detected.
 
 | Issue | Solution |
 |-------|----------|
-| `AUTH_ERROR` | Check `CONSTELLATION_ACCESS_KEY` is set correctly, use `constellation auth` CLI command to set |
+| `AUTH_ERROR` | Check `CONSTELLATION_ACCESS_KEY` is set correctly, use `npx @constellationdev/cli auth` to set |
 | `PROJECT_NOT_INDEXED` | Run `constellation index --full` in your project |
-| Commands not appearing | Restart Antigravity CLI or check plugin path |
+| Skills not appearing | Restart Antigravity, check the plugin path, or browse `/skills` |
+| MCP server not connecting | Check `/mcp` in the Antigravity CLI for server status and logs |
 
 ## Documentation
 
 - [Constellation Documentation](https://docs.constellationdev.io) — Full platform documentation
 - [MCP Server](https://github.com/shiftinbits/constellation-mcp) — Underlying MCP server
-- [Antigravity CLI Plugins](https://antigravity.google/docs/plugins/) — Plugin development guide
+- [Antigravity Plugins](https://antigravity.google/docs/plugins) — Plugin structure reference
+- [Antigravity CLI Plugins & Skills](https://antigravity.google/docs/cli-plugins) — CLI plugin guide
 
 ## License
 

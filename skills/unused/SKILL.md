@@ -1,8 +1,8 @@
 ---
 name: unused
-description: Find orphaned/dead code that is exported but never imported
+description: Finds orphaned/dead code that is exported but never imported. Use when asked about unused code, dead code, orphaned exports, or cleanup candidates.
 ---
-Find exported code that is never imported or used anywhere in the codebase using `mcp_constellation_code_intel` with `findOrphanedCode({ filterByKind: ["{{args}}"] || [] })`.
+Find exported code that is never imported or used anywhere in the codebase using the Constellation `code_intel` tool with `findOrphanedCode({})`. If the user names a symbol kind (e.g. function, class), pass it as `findOrphanedCode({ filterByKind: ["<kind>"] })`.
 
 **If orphaned code is found**, present:
 1. **Summary**: Total count of orphaned exports, broken down by kind.

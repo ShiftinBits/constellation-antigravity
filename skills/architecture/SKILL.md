@@ -1,8 +1,8 @@
 ---
 name: architecture
-description: Get a high-level overview of the codebase architecture
+description: Provides a high-level overview of the codebase architecture, including languages, symbols, and key modules. Use when asked about project structure, architecture overview, or codebase composition.
 ---
-Retrieve a high-level architectural overview of the codebase using `mcp_constellation_code_intel` with `getArchitectureOverview({ includeMetrics: true, includeModuleGraph: false })`.
+Retrieve a high-level architectural overview of the codebase using the Constellation `code_intel` tool with `getArchitectureOverview({ includeMetrics: true, includeModuleGraph: false })`.
 
 **Present the following:**
 

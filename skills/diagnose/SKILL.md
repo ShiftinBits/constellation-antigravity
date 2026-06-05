@@ -1,8 +1,8 @@
 ---
 name: diagnose
-description: Quick health check for Constellation connectivity and authentication
+description: Runs a Constellation health check covering MCP server, API auth, and project indexing. Use when Constellation seems broken, queries fail, or the user asks to diagnose code intelligence issues.
 ---
-Run a quick Constellation health check by calling `mcp_constellation_code_intel` with `getArchitectureOverview({ includeMetrics: true })`.
+Run a quick Constellation health check by calling the Constellation `code_intel` tool with `getArchitectureOverview({ includeMetrics: true })`.
 
 **Interpret the response and report:**
 
@@ -10,7 +10,7 @@ Run a quick Constellation health check by calling `mcp_constellation_code_intel`
 Report:
 - MCP Server: UNREACHABLE
 - API Auth: -
-- Quick Fixes: Restart Gemini CLI, verify npm `@constellationdev/mcp@latest`, or check manifest.
+- Quick Fixes: Restart Antigravity CLI, verify npm `@constellationdev/mcp@latest`, or check the plugin's `mcp_config.json`.
 
 ### If `result.success` is true:
 Report:
@@ -26,7 +26,7 @@ Report:
 - MCP Server: OK
 - API Auth: FAILED
 - Issue: Authentication failed - API key missing or invalid.
-- Quick Fix: Run `constellation auth` to configure credentials.
+- Quick Fix: Run `npx @constellationdev/cli auth` to configure credentials.
 
 **PROJECT_NOT_INDEXED:**
 - MCP Server: OK
