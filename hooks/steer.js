@@ -4,9 +4,10 @@
 // Input (stdin): { toolCall: { name, args }, stepIdx, conversationId, ... }
 // Output (stdout): { decision, reason? }
 //
-// Decisions are chosen to never change permission behavior:
-// - grep_search / find_by_name are read-only, so "allow" is a no-op grant.
-// - run_command keeps the default permission flow via "ask" (respects Always Allow).
+// Every path returns decision "ask", which defers to the host's normal
+// permission flow (it respects Always Allow and the default policy for
+// read-only tools). This hook never grants ("allow") or blocks ("deny");
+// it only attaches a steering reason when a text-search tool is used.
 
 const SHELL_SEARCH_REGEX = /\b(?:grep|rg|glob|awk|findstr)\b/i;
 
@@ -23,13 +24,12 @@ async function main() {
 	let inputData;
 	try { inputData = JSON.parse(input); } catch (e) { inputData = {}; }
 
-	const toolName = inputData.toolCall?.name || '';
-	const neutral = toolName === 'run_command' ? 'ask' : 'allow';
+	if (!process.env.CONSTELLATION_ACCESS_KEY?.startsWith('ak:')) return emit({ decision: 'ask' });
 
-	if (!process.env.CONSTELLATION_ACCESS_KEY?.startsWith('ak:')) return emit({ decision: neutral });
+	const toolName = inputData.toolCall?.name || '';
 
 	if (toolName === 'grep_search' || toolName === 'find_by_name') {
-		return emit({ decision: 'allow', reason: REMINDER });
+		return emit({ decision: 'ask', reason: REMINDER });
 	}
 
 	if (toolName === 'run_command') {
@@ -37,7 +37,7 @@ async function main() {
 		if (SHELL_SEARCH_REGEX.test(command)) return emit({ decision: 'ask', reason: REMINDER });
 	}
 
-	emit({ decision: neutral });
+	emit({ decision: 'ask' });
 }
 
 main();

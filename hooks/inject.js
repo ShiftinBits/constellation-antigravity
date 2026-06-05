@@ -19,8 +19,8 @@ async function main() {
 	let inputData;
 	try { inputData = JSON.parse(input); } catch (e) { return emit({}); }
 
-	// Only inject on the first model invocation of the conversation.
-	if (inputData.invocationNum !== 1) return emit({});
+	// Only inject on the first model invocation of the conversation (0-based).
+	if (inputData.invocationNum !== 0) return emit({});
 
 	emit({ injectSteps: [{ ephemeralMessage: MESSAGE }] });
 }

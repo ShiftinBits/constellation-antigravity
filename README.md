@@ -1,4 +1,4 @@
-# <img src="https://constellationdev.io/gemini-icon.svg" height="30"> Constellation Plugin for Google Antigravity
+# <img src="https://constellationdev.io/antigravity-icon.svg" height="30"> Constellation Plugin for Google Antigravity
 
 [![MCP Server](https://img.shields.io/badge/MCP-@constellationdev/mcp-black.svg?logo=modelcontextprotocol)](https://github.com/ShiftinBits/constellation-mcp) [![License: AGPL-3.0](https://img.shields.io/badge/License-AGPL--3.0-3DA639?logo=opensourceinitiative&logoColor=white)](LICENSE)
 
@@ -38,9 +38,9 @@ Event hooks transparently steer Antigravity toward `code_intel` for structural c
 | Hook | Event | Matcher | Behavior |
 |------|-------|---------|----------|
 | **constellation-context** | `PreInvocation` | — | Injects `code_intel` awareness as an ephemeral message on the first model invocation of each conversation |
-| **constellation-tool-steering** | `PreToolUse` | `grep_search\|find_by_name\|run_command` | Reminds Antigravity to prefer `code_intel` when it reaches for text search, file search, or shell commands containing `grep`, `rg`, `glob`, `awk`, or `findstr` |
+| **constellation-tool-steering** | `PreToolUse` | `^(grep_search\|find_by_name\|run_command)$` | Reminds Antigravity to prefer `code_intel` when it reaches for text search, file search, or shell commands containing `grep`, `rg`, `glob`, `awk`, or `findstr` |
 
-The `PreToolUse` hook always returns a non-blocking decision: `allow` for the read-only search tools, `ask` for `run_command` (preserving the default permission flow).
+The `PreToolUse` hook always returns decision `ask`, which defers to the host's normal permission flow. It never grants (`allow`) or blocks (`deny`) tool calls; it only attaches a steering reason.
 
 ## Installation
 

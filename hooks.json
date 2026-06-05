@@ -11,7 +11,7 @@
 	"constellation-tool-steering": {
 		"PreToolUse": [
 			{
-				"matcher": "grep_search|find_by_name|run_command",
+				"matcher": "^(grep_search|find_by_name|run_command)$",
 				"hooks": [
 					{
 						"type": "command",
