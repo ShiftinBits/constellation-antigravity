@@ -3,7 +3,7 @@ description = "Quick health check for Constellation connectivity and authenticat
 prompt = """
 **IMPORTANT: Do NOT invoke any skills or other commands. Directly call the MCP tool specified below.**
 
-Run a quick Constellation health check by calling the Constellation `code_intel` tool with `getArchitectureOverview({ includeMetrics: true })`.
+Run a quick Constellation health check by calling the Constellation `code_intel` tool with `getArchitectureOverview({})`.
 
 **Interpret the response and report:**
 
@@ -17,8 +17,8 @@ Report:
 Report:
 - MCP Server: OK
 - API Auth: OK
-- Project: <projectName>
-- Index: <totalFiles> files, <totalSymbols> symbols
+- Project: <metadata.primaryLanguage> project
+- Index: <metadata.totalFiles> files, <structure.symbols.total> symbols
 - Status: All systems operational.
 
 ### If `result.success` is false, check `result.error.code`:

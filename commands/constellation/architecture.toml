@@ -8,21 +8,23 @@ Retrieve a high-level architectural overview of the codebase using the Constella
 **Present the following:**
 
 1. **Project Summary**
-   - Project name
-   - Total files and total symbols
-   - Supported languages
+   - Primary language (result.data.metadata.primaryLanguage) and detected frameworks (result.data.metadata.frameworks)
+   - Total files (result.data.metadata.totalFiles) and total symbols (result.data.structure.symbols.total)
 
 2. **Language Distribution**
-   - For each language in result.data.metrics.byLanguage, show name, file count, symbol count, and percentage of codebase.
+   - For each language in result.data.metadata.languages, show name (language), file count (fileCount), and percentage of codebase (percentage).
 
 3. **Symbol Breakdown**
-   - Top 10 symbol kinds from result.data.metrics.byKind (functions, classes, interfaces, etc.) with counts.
+   - Top 10 symbol kinds from result.data.structure.symbols.byKind (functions, classes, interfaces, etc.) with counts, plus the exported count (result.data.structure.symbols.exported).
 
-4. **Key Directories**
-   - Top 10 directories by symbol count from result.data.structure (these represent the main modules/areas of the codebase).
+4. **Dependency Hotspots**
+   - Most connected files from result.data.dependencies.internal.mostConnectedFiles (path, incoming/outgoing counts; these are the hub modules of the codebase) and top external packages from result.data.dependencies.external.topPackages.
 
-5. **Observations** (optional insights):
-   - Note if it's heavily function-based vs class-based, multi-language codebase characteristics, and relative size of different areas.
+5. **Quality Metrics** (only if result.data.metrics is present)
+   - Average complexity and high-complexity count (metrics.complexity), maintainability score and issues (metrics.maintainability), and test coverage percentage if available (metrics.testCoverage).
+
+6. **Observations** (optional insights):
+   - Note if it's heavily function-based vs class-based, multi-language codebase characteristics, and concentration of connections in a few hub files.
 
 Keep the output concise and scannable. Focus on giving a quick mental model of the codebase structure.
 """
